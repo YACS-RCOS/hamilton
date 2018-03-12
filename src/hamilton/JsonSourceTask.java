@@ -7,7 +7,9 @@ import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
 
 public class JsonSourceTask extends SourceTask {
-
+	String endpoint;
+	String topic;
+	
 	@Override
 	public String version() {
 		// TODO Auto-generated method stub
@@ -17,7 +19,9 @@ public class JsonSourceTask extends SourceTask {
 	@Override
 	public void start(Map<String, String> props) {
 		// TODO Auto-generated method stub
-
+		this.endpoint = props.get(JsonSourceConnector.ENDPOINT_CONFIG);
+		
+		
 	}
 
 	@Override
