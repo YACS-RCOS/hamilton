@@ -1,4 +1,4 @@
-package yacs_mq.hamilton;
+package io.yacs.hamilton;
 
 /**
  * Hello world!
