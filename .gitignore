@@ -22,5 +22,5 @@
 hs_err_pid*
 
 # Eclipse Project Setup
-.project
 /target/
+.vscode/
