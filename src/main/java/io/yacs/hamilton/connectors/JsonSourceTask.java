@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
 import org.json.JSONArray;
@@ -15,9 +16,9 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
 public class JsonSourceTask extends SourceTask {
-    String endpoint;
     String topic;
-    Integer pollInterval;
+    String endpoint;
+    Long pollInterval;
 
     @Override
     public String version() {
@@ -27,9 +28,9 @@ public class JsonSourceTask extends SourceTask {
 
     @Override
     public void start(Map<String, String> props) {
-        // TODO Auto-generated method stub
-        this.endpoint = props.get(JsonSourceConnector.ENDPOINT_CONFIG);
         this.topic = props.get(JsonSourceConnector.TOPIC_CONFIG);
+        this.endpoint = props.get(JsonSourceConnector.ENDPOINT_CONFIG);
+        this.pollInterval = Long.valueOf(props.get(JsonSourceConnector.POLL_INTERVAL_CONFIG));
     }
 
     @Override
@@ -43,7 +44,7 @@ public class JsonSourceTask extends SourceTask {
             if (sourceData.length() > 0) {
                 sourceData.forEach(item -> {
                     JSONObject record = (JSONObject) item;
-                    new SourceRecord()
+                    records.add(new SourceRecord(null, null, topic, Schema.STRING_SCHEMA, record.toString()));
                 });
             } else {
                 Thread.sleep(this.pollInterval.longValue() * 1000L);
