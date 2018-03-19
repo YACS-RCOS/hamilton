@@ -38,7 +38,7 @@ To allow for this, and to simplify development, all sources must comply with the
 
 ### Specification
 
-The source format borrows much of its structure from json:api, with a few modifications. The most significant difference is in the "relationship object". The Hamilton "relationship object" allows for relationships defined by arbitrary fields.
+The source format borrows most of its structure from [json:api](https://jsonapi.org), with a few modifications. The most significant difference is in the "relationship object". The Hamilton "relationship object" allows for relationships defined by arbitrary fields.
 
 A source SHOULD represent a logical or physical source of data. A source MUST contain one or more HTTP endpoints. Each endpoint MUST respond with JSON. The JSON response MUST have the top-level objects `meta` and `data`.
 
@@ -64,12 +64,12 @@ Each record in MUST have the following fields:
     - `relationships` MUST be an object
     - `relationships` MUST contain an object for each relation ("relationship object")
     - Each "relationship object" SHOULD have the singularized type of the related object as a key
-- "relationship object"
-    - A "relationship object" MUST contain one object named `data`
-    - `data` MUST contain a member `type`, which MUST be the type of the related record
-    - `data` MUST contain an "attributes object"
-    - The "attributes object" MUST contain at least one member
-    - The members of the "attributes object" SHOULD identify exactly one record of the related type
+    - `"relationship object"`
+        - A "relationship object" MUST contain one object named `data`
+        - `data` MUST contain a member `type`, which MUST be the type of the related record
+        - `data` MUST contain an "attributes object"
+        - The "attributes object" MUST contain at least one member
+        - The members of the "attributes object" SHOULD identify exactly one record of the related type
 
 ### Examples
 
@@ -96,6 +96,24 @@ Each record in MUST have the following fields:
                     "data": {
                         type: "subjects",
                         "attributes": { "shortname": "CSCI" }
+                    }
+                }
+            }
+        },
+        {
+            "type": "courses",
+            "id": "courses/MATH/2400",
+            "attributes": {
+                "shortname": "MATH 1200",
+                "number": "2400",
+                "longname": "Differential Equations",
+                ...
+            },
+            "relationships": {
+                "subject": {
+                    "data": {
+                        type: "subjects",
+                        "attributes": { "shortname": "MATH" }
                     }
                 }
             }
