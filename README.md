@@ -50,15 +50,26 @@ The `meta` field MUST contain the field `source`. The `source` field containts m
 The `data` field contains the records themselves. It MUST be an array containing zero or more objects. We will call these objects Records.
 
 Each record in MUST have the following fields:
-- `type`: the type of the record\
-    Note: `type` MUST be the same value for each record in `data`
-- `id`: an arbitrary identifier for the record\
-    Note: `id` MUST be unique within the scope of the source\
-    Note: `id` SHOULD have some semantic meaning and be human readable
-- `attributes`: the attributes for the record\
-    Note: `attributes` MUST be an object
-    Note: `attributes` MAY contain any valid json values
-    Note: `attributes` MUST NOT contain any member named `relationships`, `links`, `removed`, `id`, `uuid`
+- `type`: the type of the record
+    - `type` MUST be the same value for each record in `data`
+- `id`: an arbitrary identifier for the record
+    - `id` MUST be unique within the scope of the source
+    - `id` SHOULD have some semantic meaning and be human readable
+- `attributes`: the attributes for the record ("attributes object")
+    - `attributes` MUST be an object
+    - `attributes` MAY contain any valid json values
+    - `attributes` MUST NOT contain any member named `relationships`, `links`, `removed`, `id`, `uuid`
+- `relationships`: describes how the record is related to other records
+    - unlike `json:api`, `relationships` in hamilton are defined by `attributes` objects. This allows the programmer to specify a relationship based on any field of the related record, allowing for relationships between records that may have originiated from different or multiple sources.
+    - `relationships` MUST be an object
+    - `relationships` MUST contain an object for each relation ("relationship object")
+    - Each "relationship object" SHOULD have the singularized type of the related object as a key
+- "relationship object"
+    - A "relationship object" MUST contain one object named `data`
+    - `data` MUST contain a member `type`, which MUST be the type of the related record
+    - `data` MUST contain an "attributes object"
+    - The "attributes object" MUST contain at least one member
+    - The members of the "attributes object" SHOULD identify exactly one record of the related type
 
 ### Examples
 
@@ -82,7 +93,10 @@ Each record in MUST have the following fields:
             },
             "relationships": {
                 "subject": {
-                    "data": { "attributes": { "shortname": "CSCI" } }
+                    "data": {
+                        type: "subjects",
+                        "attributes": { "shortname": "CSCI" }
+                    }
                 }
             }
         }
@@ -131,10 +145,16 @@ Each record in MUST have the following fields:
             },
             "relationships": {
                 "session": {
-                    "data": { "attributes": { "shortname": "201809" } }
+                    "data": {
+                        "type": "sessions",
+                        "attributes": { "shortname": "201809" }
+                    }
                 },
                 "course": {
-                    "data": { "attributes": { "shortname": "CSCI 1200" } }
+                    "data": {
+                        "type": "courses",
+                        "attributes": { "shortname": "CSCI 1200" }
+                    }
                 }
             }
         }
