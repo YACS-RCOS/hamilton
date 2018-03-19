@@ -24,18 +24,23 @@ Hamilton is build on Kafka, and makes heavy use of the Kafka Streams and Kafka C
 
 Any arbitrary data source can therefore be used with Hamilton by creating an adapter microservice in the programmer's language of choice
 
+---
+
 ## Pipeline
 
+---
 
 ## Sources
 
+A Hamilton instance can consume any number of sources. A source is meant to be an adapter between a stateful data source and the Hamilton pipeline. These sources may contain entirely disjoint data sets, or may contain overlapping or incomplete collections and records. The Hamilton pipeline will automatically resolve and amalgamate all of the collections and records from each of the sources.
 
+To allow for this, and to simplify development, all sources must comply with the given specification (below). As long as the source complies with the specification, it can be written in any language or framework, and may interface with any external services or dependencies.
 
-### Source Format
+### Specification
 
 The source format borrows much of its structure from json:api, with a few modifications. The most significant difference is in the "relationship object". The Hamilton "relationship object" allows for relationships defined by arbitrary fields.
 
-Each source endpoint MUST have the top-level objects `meta` and `data`.
+A source SHOULD represent a logical or physical source of data. A source MUST contain one or more HTTP endpoints. Each endpoint MUST respond with JSON. The JSON response MUST have the top-level objects `meta` and `data`.
 
 The `meta` field MUST contain the field `source`. The `source` field containts meta-information on the source itself. It MUST be an object and MUST have the following fields:
 - `type`: the type of records that `data` will contain
@@ -137,14 +142,22 @@ Each record in MUST have the following fields:
 }
 ```
 
+---
+
 ## Contributing
 
 We encourage you to create issues and contribute to Hamilton! To contribute fork the repo, comment on an issue, and submit a pull request to the master branch. Build checks and code reviews are required before merging. Once checks have passed, a project owner will merge the changes.
+
+---
 
 ## Code of Conduct
 
 We strive to create and maintain an inclusive, welcoming and safe community for all. Please review our Code of Conduct in `CODE_OF_CONDUCT.md` before participating in the project.
 
+---
+
 ## License
 
 Hamilton is currently released without a license! Oh no! The project will soon be released with an OSI approved license, once it has reached a higher level of maturity (very soon!).
+
+---
